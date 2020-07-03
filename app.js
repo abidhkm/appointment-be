@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -12,13 +13,14 @@ var compression = require('compression');
 var helmet = require('helmet');
 
 var app = express();
-
+app.use(cors());
 
 // Set up mongoose connection
 var mongoose = require('mongoose');
-var dev_db_url = 'mongodb+srv://cooluser:coolpassword@cluster0-mbdj7.mongodb.net/local_library?retryWrites=true'
+// var dev_db_url = 'mongodb+srv://abidh:abidh@cluster0.xt7ws.mongodb.net/appointment?retryWrites=true&w=majority' //atlas
+var dev_db_url = 'mongodb://nova:nova@127.0.0.1:27017/appoinment?'
 var mongoDB = process.env.MONGODB_URI || dev_db_url;
-mongoose.connect(mongoDB, { useNewUrlParser: true });
+mongoose.connect(mongoDB, { useNewUrlParser: true, useCreateIndex: true, });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

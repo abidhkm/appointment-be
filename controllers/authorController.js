@@ -13,7 +13,7 @@ exports.author_list = function (req, res, next) {
         .exec(function (err, list_authors) {
             if (err) { return next(err); }
             // Successful, so render.
-            res.render('author_list', { title: 'Author List', author_list: list_authors });
+            res.send({ title: 'Author List', author_list: list_authors });
         })
 
 };
@@ -49,44 +49,32 @@ exports.author_create_get = function (req, res, next) {
 };
 
 // Handle Author create on POST.
-exports.author_create_post = [
-
-    // Validate fields.
-    body('first_name').isLength({ min: 1 }).trim().withMessage('First name must be specified.')
-        .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
-    body('family_name').isLength({ min: 1 }).trim().withMessage('Family name must be specified.')
-        .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
-    body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601(),
-    body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601(),
-
-    // Sanitize fields.
-    sanitizeBody('first_name').escape(),
-    sanitizeBody('family_name').escape(),
-    sanitizeBody('date_of_birth').toDate(),
-    sanitizeBody('date_of_death').toDate(),
-
-    // Process request after validation and sanitization.
-    (req, res, next) => {
+exports.author_create_post = function    (req, res, next) {
 
         // Extract the validation errors from a request.
-        const errors = validationResult(req);
-        
+        // const errors = validationResult(req);
+
+        console.log(req.body.first_name,
+            req.body.family_name,
+            req.body.date_of_birth,
+            req.body.date_of_death, "testttt")
+
         // Create Author object with escaped and trimmed data
         var author = new Author(
             {
                 first_name: req.body.first_name,
                 family_name: req.body.family_name,
-                date_of_birth: req.body.date_of_birth,
-                date_of_death: req.body.date_of_death,
+                date_of_birth: "2020-06-09T00:00:00.000Z",
+                date_of_death: "2020-06-29T00:00:00.000Z",
             }
         );
 
-        if (!errors.isEmpty()) {
-            // There are errors. Render form again with sanitized values/errors messages.
-            res.render('author_form', { title: 'Create Author', author: author, errors: errors.array() });
-            return;
-        }
-        else {
+        // if (!errors.isEmpty()) {
+        //     // There are errors. Render form again with sanitized values/errors messages.
+        //     res.render('author_form', { title: 'Create Author', author: author, errors: errors.array() });
+        //     return;
+        // }
+        // else {
             // Data from form is valid.
 
             // Save author.
@@ -95,9 +83,8 @@ exports.author_create_post = [
                 // Successful - redirect to new author record.
                 res.redirect(author.url);
             });
-        }
+        // }
     }
-];
 
 
 
