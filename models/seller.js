@@ -4,15 +4,9 @@ var Schema = mongoose.Schema;
 
 var SellerSchema = new Schema({
     user: { type: Schema.ObjectId, ref: 'User', required: true },
-    sellingItems: { type: String,  maxlength: 100 },
+    name: { type: String,  maxlength: 30 }, // company name
+    email: { type: String,  maxlength: 30 },
+    contact: { type: String,  maxlength: 20 },
 });
 
-// // Virtual for this book instance URL.
-// BookSchema
-// .virtual('url')
-// .get(function () {
-//   return '/catalog/book/'+this._id;
-// });
-
-// Export model.
 module.exports = mongoose.model('Seller', SellerSchema);

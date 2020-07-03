@@ -8,12 +8,4 @@ var TimeSlotSchema = new Schema({
     end: { type: Date, required: true },
 });
 
-// // Virtual for this book instance URL.
-// BookSchema
-// .virtual('url')
-// .get(function () {
-//   return '/catalog/book/'+this._id;
-// });
-
-// Export model.
 module.exports = mongoose.model('TimeSlot', TimeSlotSchema);
