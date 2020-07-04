@@ -7,9 +7,7 @@ var buyer_controller = require('../controllers/buyerController')
 var timeslot_controller = require('../controllers/timeslotController')
 var appointmentController = require('../controllers/appointmentController')
 
-/// BOOK ROUTES ///
 
-// GET catalog home page.
 router.post('/user', user_controller.create_user);  
 
 router.post('/seller', seller_controller.create_seller); 
