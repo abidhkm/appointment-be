@@ -1,6 +1,6 @@
 var Appointment = require('../models/appointment')
+var ObjectId = require('mongodb').ObjectID
 
-// Handle Author create on POST.
 exports.create_appointment = function (req, res, next) {
 
     var appointment = new Appointment(
@@ -17,13 +17,44 @@ exports.create_appointment = function (req, res, next) {
     });
 }
 
-// respond to appointment
-
 exports.list_requests = function (req, res, next) {
 
-    const query = Appointment.find({ status: req.query.status })
-        .populate({ path: 'slot', match: { seller: req.headers.user } })
-        .populate({ path: 'buyer', populate: { path: 'user' } })
+    // const query = Appointment.find({ status: req.query.status })
+    //     .populate({ path: 'slot', match: { seller: req.headers.user } })//
+    //     .populate({ path: 'buyer', populate: { path: 'user' } })//
+
+    const query = Appointment.aggregate([
+        { $match: { "status": req.query.status } },
+        {
+            $lookup: {
+                from: 'timeslots',
+                localField: 'slot',
+                foreignField: '_id',
+                as: 'timeslot'
+              }
+        },
+        {   $unwind:"$timeslot" },     
+        {
+            $lookup: {
+                from: 'buyers',
+                localField: 'buyer',
+                foreignField: '_id',
+                as: 'buyer'
+              }
+        },
+        {   $unwind:"$buyer" },     
+        { $match: { "timeslot.seller": ObjectId(req.headers.user) } },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'buyer.user',
+                foreignField: '_id',
+                as: 'user'
+              }
+        },
+        {   $unwind:"$user" },     
+        // { $project:{} }
+    ])
 
     query.exec(function (err, sellers) {
         if (err) res.send(err)

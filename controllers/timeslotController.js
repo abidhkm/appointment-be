@@ -1,11 +1,12 @@
 
 var TimeSlot = require('../models/timeslot')
+var ObjectId = require('mongodb').ObjectID
 
 exports.create_slot = function (req, res, next) {
 
     console.log(req.headers,
-        
-       )
+
+    )
 
     var timeSlot = new TimeSlot(
         {
@@ -27,7 +28,14 @@ exports.create_slot = function (req, res, next) {
 
 exports.list_slots = function (req, res, next) {
 
-    const query = TimeSlot.find().populate({ path: 'seller', match: { _id: req.headers.user } })
+    // const query = TimeSlot.find().populate({ path: 'seller', match: { _id: req.headers.user } })
+    // const query = TimeSlot.find()
+    const query = TimeSlot.aggregate([
+        {
+            $match:{ seller: ObjectId(req.headers.user) }
+        }
+    ])
+
 
     query.exec(function (err, slots) {
         if (err) res.send(err)
@@ -38,18 +46,19 @@ exports.list_slots = function (req, res, next) {
 exports.available_slots = function (req, res, next) {
 
     const query = TimeSlot.aggregate([
-        // { "$match": { "UserName": "administrator" } },
+        { $match: { seller: ObjectId(req.query.seller) } },
         {
-        $lookup:{
-            from:"appointments",
-            localField:"_id",
-            foreignField:"slot",
-            as:"appointment",
+            $lookup: {
+                from: "appointments",
+                localField: "_id",
+                foreignField: "slot",
+                as: "appointment",
+            },
         },
-    },
-    
-    
-])
+        // {   $unwind:"$appointment" },     
+        
+
+    ])
 
     query.exec(function (err, slots) {
         if (err) res.send(err)
