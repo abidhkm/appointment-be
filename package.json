@@ -1,5 +1,5 @@
 {
-  "name": "express-locallibrary-tutorial",
+  "name": "appointment-app-backend",
   "version": "0.0.0",
   "engines": {
     "node": "10.15.1"
