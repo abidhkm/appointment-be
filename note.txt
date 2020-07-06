@@ -1,0 +1,15 @@
+1. Run mongo at 127.0.0.1:27017 - 
+    connection string - mongodb://nova:nova@127.0.0.1:27017/appoinment?
+2. Run the backend app first on port 3000 (default)
+    npm i
+    npm start
+3. Run the front end app at 3001
+    npm i
+    npm start
+4. Run the android app 
+    npm i
+    npx react-native start
+    npx react-native run-android
+5. There is a config file in admin app and user app, there you need to mention which user's view you want to see, 
+    for admin app: it should be id from sellers collection
+    for user app: it should be id from buyer collection
