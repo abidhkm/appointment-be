@@ -3,6 +3,11 @@
 2. Run the backend app first on port 3000 (default)
     npm i
     npm start
+
+    First you need to create some users 
+    Make some users sellers and some as buyers
+    postman collection for that apis: https://www.postman.com/collections/5ebf1805109260fc6ee2
+
 3. Run the front end app at 3001
     npm i
     npm start
