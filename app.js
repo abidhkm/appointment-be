@@ -15,7 +15,6 @@ app.use(cors());
 
 // Set up mongoose connection
 var mongoose = require('mongoose');
-// var dev_db_url = 'mongodb+srv://abidh:abidh@cluster0.xt7ws.mongodb.net/appointment?retryWrites=true&w=majority' //atlas
 var dev_db_url = 'mongodb://nova:nova@127.0.0.1:27017/appoinment?'
 var mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useCreateIndex: true, });
